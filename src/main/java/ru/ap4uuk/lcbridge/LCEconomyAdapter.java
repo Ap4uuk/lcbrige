@@ -14,6 +14,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 public class LCEconomyAdapter {
@@ -29,6 +31,14 @@ public class LCEconomyAdapter {
         COIN_VALUES.put(id("lightmanscurrency:coin_iron"),         10L);
         COIN_VALUES.put(id("lightmanscurrency:coin_copper"),        1L);
     }
+
+    /**
+     * Коэффициент перевода валюты Essentials в минимальную валюту LC.
+     * Минимальная единица — медная монета со стоимостью {@code 1}, поэтому 1 единица в Essentials
+     * соответствует 1 медной монете по умолчанию. При необходимости можно изменить коэффициент,
+     * чтобы учесть копейки или другую дробность в Essentials.
+     */
+    public static final BigDecimal ESSENTIALS_TO_LOWEST_COIN_RATE = BigDecimal.ONE;
 
     private static ResourceLocation id(String s) { return new ResourceLocation(s); }
 
@@ -123,6 +133,18 @@ public class LCEconomyAdapter {
         return getInventoryBalance(player)
                 + getWalletBalance(player)
                 + getBankBalance(player);
+    }
+
+
+    /**
+     * Переводит значение валюты Essentials в стоимость монет LC с округлением до ближайшей
+     * минимальной монеты, чтобы не терять дробные значения из-за double.
+     */
+    public static long convertEssentialsToCoinValue(double essentialsAmount) {
+        return BigDecimal.valueOf(essentialsAmount)
+                .multiply(ESSENTIALS_TO_LOWEST_COIN_RATE)
+                .setScale(0, RoundingMode.HALF_UP)
+                .longValue();
     }
 
 
