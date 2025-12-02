@@ -192,6 +192,14 @@ public class LCEconomyAdapter {
        УТИЛИТЫ
        ============================================================ */
 
+    public static boolean isCoin(ItemStack stack) {
+        if (stack == null || stack.isEmpty())
+            return false;
+
+        ResourceLocation id = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        return id != null && COIN_VALUES.containsKey(id);
+    }
+
     private static ItemStack makeItem(ResourceLocation id, int count) {
         var item = ForgeRegistries.ITEMS.getValue(id);
         if (item == null) return ItemStack.EMPTY;
