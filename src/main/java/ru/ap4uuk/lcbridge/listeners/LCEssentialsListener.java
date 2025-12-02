@@ -32,9 +32,10 @@ public class LCEssentialsListener implements EconomyChangeListener {
         double newBalance = event.newBalance();
         double diff = newBalance - oldBalance;
 
-        if (Math.abs(diff) < 0.01) {
-            return;
-        }
+        long coinDelta = LCEconomyAdapter.convertEssentialsToCoinValue(diff);
+
+        // Если после перевода в минимальную монету изменений нет — не дергаем LC
+        if (coinDelta == 0) return;
 
         var server = ServerLifecycleHooks.getCurrentServer();
         if (server == null) return;
@@ -47,12 +48,12 @@ public class LCEssentialsListener implements EconomyChangeListener {
         try {
             LCBridgeSyncGuard.setSyncing(true);
 
-            if (diff > 0) {
-                // В Essentials прибавили денег → докидываем в LC
-                LCEconomyAdapter.deposit(player, (long) diff);
+            if (coinDelta > 0) {
+                // В Essentials прибавили денег → докидываем в LC без потери копеек
+                LCEconomyAdapter.deposit(player, coinDelta);
             } else {
                 // В Essentials списали → списываем в LC
-                LCEconomyAdapter.withdraw(player, (long) Math.abs(diff));
+                LCEconomyAdapter.withdraw(player, Math.abs(coinDelta));
             }
         } catch (Exception e) {
             e.printStackTrace();
