@@ -1,0 +1,69 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"                 # Forge 47.x = MC 1.20.1
+license = "All Rights Reserved"
+
+[[mods]]
+modId = "lc_essentialsx_bridge"
+version = "${mod_version}"
+displayName = "LightmansCurrency Bridge"
+authors = "Ap4uuk"
+description = '''
+Bridge-мод, предоставляющий интеграцию между:
+- LightmansCurrency (кошелек + банк)
+- EssentialsX / UnicoreConnect (цифровая валюта)
+- Внешними сайтами / API
+
+Конвертация монет LC → цифровой баланс, синхронизация, депозит/вывод,
+единая экономика между сервером, модами и веб-инфраструктурой.
+'''
+
+# -----------------------------
+# Forge — обязательная зависимость
+# -----------------------------
+[[dependencies.lc_essentialsx_bridge]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+# -----------------------------
+# Minecraft — обязательная зависимость
+# -----------------------------
+[[dependencies.lc_essentialsx_bridge]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,1.21)"
+ordering = "NONE"
+side = "BOTH"
+
+# -----------------------------
+# LightmansCurrency — обязательная зависимость ядра
+# -----------------------------
+[[dependencies.lc_essentialsx_bridge]]
+modId = "lightmanscurrency"
+mandatory = true
+versionRange = "[1.20.1-2.3.0.1b,)"
+ordering = "AFTER"
+side = "BOTH"
+
+# -----------------------------
+# UnicoreConnect / UNF-Forge — OPTIONAL (если установлен)
+# Мод работает и без него, но включает расширенное API при наличии
+# -----------------------------
+[[dependencies.lc_essentialsx_bridge]]
+modId = "unicoreconnect"
+mandatory = false
+versionRange = "[1.0.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+# -----------------------------
+# EssentialsX-Forge — OPTIONAL
+# -----------------------------
+[[dependencies.lc_essentialsx_bridge]]
+modId = "essentialsx"
+mandatory = false
+versionRange = "[1.0.0,)"
+ordering = "AFTER"
+side = "SERVER"
