@@ -70,11 +70,14 @@ public class LCEconomyAdapter {
         if (view == null || view.isEmpty())
             return 0;
 
-        MoneyValue mv = view.getRandomValue(); // 1 цепочка = 1 значение
-        if (mv == null || mv.isEmpty())
-            return 0;
+        long total = 0;
 
-        return mv.getCoreValue();
+        for (MoneyValue mv : view.allValues()) {
+            if (mv != null && !mv.isEmpty())
+                total += mv.getCoreValue();
+        }
+
+        return total;
     }
 
 
@@ -102,9 +105,10 @@ public class LCEconomyAdapter {
             if (mv == null || mv.isEmpty())
                 continue;
 
-            MoneyValue v = mv.getRandomValue();
-            if (v != null && !v.isEmpty())
-                total += v.getCoreValue();
+            for (MoneyValue v : mv.allValues()) {
+                if (v != null && !v.isEmpty())
+                    total += v.getCoreValue();
+            }
         }
 
         return total;
